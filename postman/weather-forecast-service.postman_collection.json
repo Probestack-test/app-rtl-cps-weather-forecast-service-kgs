@@ -1,0 +1,353 @@
+{
+  "info": {
+    "name": "Weather Forecast Service Postman Collection",
+    "description": "Current weather, hourly and daily forecasts, and ground elevation for\nany point on Earth, addressed by latitude and longitude. Forecasts are\navailable from the default blended model and from the NOAA GFS model,\nso the same location can be compared across models. Backed by the free\npublic Open-Meteo service, so the server URL is real and reachable and\na gateway generated from this specification can be called end to end.\n\nOpenAPI version: 3.0.3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.open-meteo.com/v1",
+      "type": "string",
+      "description": "Override with the base URL of the deployed Kong gateway."
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get the weather forecast for a location",
+      "request": {
+        "method": "GET",
+        "description": "Get the weather forecast for a location\n\nResponses:\n- 200: The weather for the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/forecast",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "forecast"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 The weather for the requested location.",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast for a location\n\nResponses:\n- 200: The weather for the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forecast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "forecast"
+              ]
+            }
+          },
+          "status": "The weather for the requested location.",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "400",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast for a location\n\nResponses:\n- 200: The weather for the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forecast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "forecast"
+              ]
+            }
+          },
+          "status": "400",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast for a location\n\nResponses:\n- 200: The weather for the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forecast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "forecast"
+              ]
+            }
+          },
+          "status": "429",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "500",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast for a location\n\nResponses:\n- 200: The weather for the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forecast",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "forecast"
+              ]
+            }
+          },
+          "status": "500",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        }
+      ]
+    },
+    {
+      "name": "Get the weather forecast from the NOAA GFS model",
+      "request": {
+        "method": "GET",
+        "description": "Get the weather forecast from the NOAA GFS model\n\nResponses:\n- 200: The weather for the requested location from the GFS model.\n- 400: Response\n- 429: Response\n- 500: Response",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/gfs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "gfs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 The weather for the requested location from the GFS model.",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast from the NOAA GFS model\n\nResponses:\n- 200: The weather for the requested location from the GFS model.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gfs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gfs"
+              ]
+            }
+          },
+          "status": "The weather for the requested location from the GFS model.",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "400",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast from the NOAA GFS model\n\nResponses:\n- 200: The weather for the requested location from the GFS model.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gfs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gfs"
+              ]
+            }
+          },
+          "status": "400",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast from the NOAA GFS model\n\nResponses:\n- 200: The weather for the requested location from the GFS model.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gfs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gfs"
+              ]
+            }
+          },
+          "status": "429",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "500",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the weather forecast from the NOAA GFS model\n\nResponses:\n- 200: The weather for the requested location from the GFS model.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gfs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gfs"
+              ]
+            }
+          },
+          "status": "500",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        }
+      ]
+    },
+    {
+      "name": "Get the elevation of a location",
+      "request": {
+        "method": "GET",
+        "description": "Get the elevation of a location\n\nResponses:\n- 200: The elevation of the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/elevation",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "elevation"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 The elevation of the requested location.",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the elevation of a location\n\nResponses:\n- 200: The elevation of the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/elevation",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "elevation"
+              ]
+            }
+          },
+          "status": "The elevation of the requested location.",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "400",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the elevation of a location\n\nResponses:\n- 200: The elevation of the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/elevation",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "elevation"
+              ]
+            }
+          },
+          "status": "400",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the elevation of a location\n\nResponses:\n- 200: The elevation of the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/elevation",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "elevation"
+              ]
+            }
+          },
+          "status": "429",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "500",
+          "originalRequest": {
+            "method": "GET",
+            "description": "Get the elevation of a location\n\nResponses:\n- 200: The elevation of the requested location.\n- 400: Response\n- 429: Response\n- 500: Response",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/elevation",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "elevation"
+              ]
+            }
+          },
+          "status": "500",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        }
+      ]
+    }
+  ]
+}

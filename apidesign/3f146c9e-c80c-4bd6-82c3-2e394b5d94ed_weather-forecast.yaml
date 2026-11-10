@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: Weather Forecast Service
+  version: 1.0.0
+  description: |
+    Current weather, hourly and daily forecasts, and ground elevation for
+    any point on Earth, addressed by latitude and longitude. Forecasts are
+    available from the default blended model and from the NOAA GFS model,
+    so the same location can be compared across models. Backed by the free
+    public Open-Meteo service, so the server URL is real and reachable and
+    a gateway generated from this specification can be called end to end.
+  contact:
+    name: ForgeSphere Developer Experience
+    email: devex@forgesphere.example.com
+
+servers:
+  - url: https://api.open-meteo.com/v1
+    description: Public Weather Server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Forecasts
+    description: Current conditions and hourly or daily forecasts for a location.
+  - name: Locations
+    description: Facts about a location, such as its elevation.
+
+paths:
+  # ==================== FORECASTS ====================
+  /forecast:
+    get:
+      tags: [Forecasts]
+      summary: Get the weather forecast for a location
+      description: |
+        Returns the weather for a latitude and longitude from the default
+        model. Ask for the current conditions, for hourly values, for daily
+        values, or for any mix of them. Hourly and daily values are chosen
+        by name, for example temperature_2m or temperature_2m_max.
+      operationId: getForecast
+      parameters:
+        - $ref: '#/components/parameters/Latitude'
+        - $ref: '#/components/parameters/Longitude'
+        - $ref: '#/components/parameters/CurrentWeather'
+        - $ref: '#/components/parameters/Hourly'
+        - $ref: '#/components/parameters/Daily'
+        - $ref: '#/components/parameters/Timezone'
+        - $ref: '#/components/parameters/ForecastDays'
+      responses:
+        '200':
+          description: The weather for the requested location.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /gfs:
+    get:
+      tags: [Forecasts]
+      summary: Get the weather forecast from the NOAA GFS model
+      description: |
+        Returns the weather for a latitude and longitude from the NOAA Global
+        Forecast System model only. Use it next to the default forecast to
+        compare how two models see the same location.
+      operationId: getGfsForecast
+      parameters:
+        - $ref: '#/components/parameters/Latitude'
+        - $ref: '#/components/parameters/Longitude'
+        - $ref: '#/components/parameters/CurrentWeather'
+        - $ref: '#/components/parameters/Hourly'
+        - $ref: '#/components/parameters/Daily'
+        - $ref: '#/components/parameters/Timezone'
+        - $ref: '#/components/parameters/ForecastDays'
+      responses:
+        '200':
+          description: The weather for the requested location from the GFS model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ==================== LOCATIONS ====================
+  /elevation:
+    get:
+      tags: [Locations]
+      summary: Get the elevation of a location
+      description: |
+        Returns the ground elevation in metres above sea level for a latitude
+        and longitude.
+      operationId: getElevation
+      parameters:
+        - $ref: '#/components/parameters/Latitude'
+        - $ref: '#/components/parameters/Longitude'
+      responses:
+        '200':
+          description: The elevation of the requested location.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ElevationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT token issued to API consumers."
+
+  parameters:
+    Latitude:
+      name: latitude
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: -90
+        maximum: 90
+      description: "Latitude of the location in decimal degrees."
+      example: 28.61
+    Longitude:
+      name: longitude
+      in: query
+      required: true
+      schema:
+        type: number
+        format: double
+        minimum: -180
+        maximum: 180
+      description: "Longitude of the location in decimal degrees."
+      example: 77.23
+    CurrentWeather:
+      name: current_weather
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+      description: "Include the current conditions in the response."
+      example: true
+    Hourly:
+      name: hourly
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "Comma separated hourly values to return."
+      example: "temperature_2m,precipitation"
+    Daily:
+      name: daily
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "Comma separated daily values to return."
+      example: "temperature_2m_max,temperature_2m_min"
+    Timezone:
+      name: timezone
+      in: query
+      required: false
+      schema:
+        type: string
+        default: GMT
+      description: "Time zone for the returned times; auto picks the zone of the location."
+      example: "auto"
+    ForecastDays:
+      name: forecast_days
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 16
+        default: 7
+      description: "How many days of forecast to return."
+      example: 3
+
+  schemas:
+    ForecastResponse:
+      type: object
+      required: [latitude, longitude, timezone, elevation]
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: "Latitude of the grid point the values belong to."
+          example: 28.576448
+        longitude:
+          type: number
+          format: double
+          description: "Longitude of the grid point the values belong to."
+          example: 77.18678
+        generationtime_ms:
+          type: number
+          description: "Time the server took to produce the forecast, in milliseconds."
+          example: 0.103
+        utc_offset_seconds:
+          type: integer
+          description: "Offset of the returned times from UTC, in seconds."
+          example: 19800
+        timezone:
+          type: string
+          description: "Time zone of the returned times."
+          example: "Asia/Kolkata"
+        timezone_abbreviation:
+          type: string
+          description: "Short name of the time zone."
+          example: "GMT+5:30"
+        elevation:
+          type: number
+          description: "Elevation of the grid point in metres above sea level."
+          example: 214.0
+        current_weather:
+          $ref: '#/components/schemas/CurrentWeather'
+        hourly_units:
+          type: object
+          description: "Unit of each hourly value."
+          additionalProperties:
+            type: string
+          example:
+            time: "iso8601"
+            temperature_2m: "°C"
+        hourly:
+          type: object
+          description: "Hourly values, one array per requested value, next to the array of times."
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            time: ["2026-11-10T00:00", "2026-11-10T01:00"]
+        daily_units:
+          type: object
+          description: "Unit of each daily value."
+          additionalProperties:
+            type: string
+          example:
+            time: "iso8601"
+            temperature_2m_max: "°C"
+        daily:
+          type: object
+          description: "Daily values, one array per requested value, next to the array of dates."
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            time: ["2026-11-10", "2026-11-11", "2026-11-12"]
+
+    CurrentWeather:
+      type: object
+      description: "The conditions at the time of the request."
+      properties:
+        time:
+          type: string
+          description: "Time of the observation."
+          example: "2026-11-10T16:00"
+        interval:
+          type: integer
+          description: "Seconds between updates of the current conditions."
+          example: 900
+        temperature:
+          type: number
+          description: "Air temperature in degrees Celsius."
+          example: 21.6
+        windspeed:
+          type: number
+          description: "Wind speed in kilometres per hour."
+          example: 8.4
+        winddirection:
+          type: integer
+          description: "Wind direction in degrees."
+          example: 310
+        is_day:
+          type: integer
+          description: "1 when it is daytime at the location, otherwise 0."
+          example: 0
+        weathercode:
+          type: integer
+          description: "WMO weather condition code."
+          example: 1
+
+    ElevationResponse:
+      type: object
+      required: [elevation]
+      properties:
+        elevation:
+          type: array
+          description: "Elevation in metres above sea level, one value per requested location."
+          items:
+            type: number
+          example: [214.0]
+
+    ErrorResponse:
+      type: object
+      required: [error, reason]
+      properties:
+        error:
+          type: boolean
+          description: "Always true for an error response."
+          example: true
+        reason:
+          type: string
+          description: "What was wrong with the request."
+          example: "Latitude must be in range of -90 to 90°. Given: 999.0."
+
+  responses:
+    BadRequest:
+      description: A parameter is missing or out of range.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The request limit was exceeded; try again later.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

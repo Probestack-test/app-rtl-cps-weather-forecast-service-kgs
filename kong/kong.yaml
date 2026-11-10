@@ -1,0 +1,76 @@
+_format_version: "3.0"
+_transform: true
+
+########################################################
+# SERVICES
+########################################################
+
+services:
+  - name: weather-forecast-service
+    host: weather-forecast-service
+    port: 443
+    protocol: https
+    path: /api
+    retries: 5
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    routes:
+      - name: weather-forecast-service-get-forecast
+        protocols:
+          - https
+          - http
+        methods:
+          - GET
+        hosts:
+          - api.example.com
+        paths:
+          - /forecast
+        strip_path: true
+        preserve_host: false
+        https_redirect_status_code: 426
+      - name: weather-forecast-service-get-gfs
+        protocols:
+          - https
+          - http
+        methods:
+          - GET
+        hosts:
+          - api.example.com
+        paths:
+          - /gfs
+        strip_path: true
+        preserve_host: false
+        https_redirect_status_code: 426
+      - name: weather-forecast-service-get-elevation
+        protocols:
+          - https
+          - http
+        methods:
+          - GET
+        hosts:
+          - api.example.com
+        paths:
+          - /elevation
+        strip_path: true
+        preserve_host: false
+        https_redirect_status_code: 426
+
+########################################################
+# PLUGINS
+########################################################
+
+plugins:
+  []
+
+########################################################
+# UPSTREAMS + TARGETS
+########################################################
+
+upstreams:
+  - name: weather-forecast-service
+    algorithm: round-robin
+    slots: 10000
+    targets:
+      - target: api.example.com:443
+        weight: 100
